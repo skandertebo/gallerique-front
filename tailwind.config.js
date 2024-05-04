@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        "login-bg": "url('/src/assets/images/bg-login.png')",
+      },
       fontFamily: {
         serif: ["Laila", "serif"],
         custom: ["Laila", "seif"],
