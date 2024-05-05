@@ -23,6 +23,11 @@ const ROUTES: RouteObject[] = [
       },
     ],
   },
+  {
+    path: "/",
+    Component: null,
+    children: [{ path: "home", Component: null }],
+  },
 ];
 
 export default ROUTES;
