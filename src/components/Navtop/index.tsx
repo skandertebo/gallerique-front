@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import Button from "../Reusable/button";
 
@@ -11,20 +12,24 @@ export default function Navtop(): JSX.Element {
         </h1>
       </div>
       <div className="flex items-center gap-4 md:pe-24 md:text-sm">
-        <Button
-          $variant="primary"
-          $color="palette-6"
-          className="px-12 md:max-w-36 max-w-20"
-        >
-          Login
-        </Button>
-        <Button
-          $variant="secondary"
-          $color="palette-6"
-          className="px-12 md:max-w-36 max-w-20"
-        >
-          Register
-        </Button>
+        <Link to="/auth/login">
+          <Button
+            $variant="primary"
+            $color="palette-6"
+            className="px-12 md:max-w-36 max-w-20"
+          >
+            Login
+          </Button>
+        </Link>
+        <Link to="/auth/register">
+          <Button
+            $variant="secondary"
+            $color="palette-6"
+            className="px-12 md:max-w-36 max-w-20"
+          >
+            Register
+          </Button>
+        </Link>
       </div>
     </div>
   );
