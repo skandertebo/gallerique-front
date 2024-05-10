@@ -1,5 +1,7 @@
 import { useLayoutEffect } from "react";
 import { useNavigate, useOutlet } from "react-router-dom";
+import AuthenticatedNavtop from "../components/AuthenticatedNavtop";
+import AuctionsProvider from "../context/auctions.context";
 import { useAuth } from "../context/auth.context";
 
 export default function AuthenticatedContainer(): JSX.Element | null {
@@ -11,5 +13,13 @@ export default function AuthenticatedContainer(): JSX.Element | null {
       navigate("/auth/login");
     }
   }, [user, whoAmiLoading, navigate]);
-  return outlet;
+  if (!user) return null;
+  return (
+    <AuctionsProvider user={user}>
+      <div className="flex flex-col">
+        <AuthenticatedNavtop user={user} />
+        {outlet}
+      </div>
+    </AuctionsProvider>
+  );
 }

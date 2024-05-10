@@ -6,14 +6,18 @@ export type ButtonVariant = "primary" | "secondary" | "tertiary";
 const Button = tw.button<{ $variant?: ButtonVariant; $color?: string }>`
 
   ${({ $variant, $color = "palette-6" }) => {
+    let className: string;
     switch ($variant) {
       case "primary":
-        return clsxm(`bg-${$color} text-white border border-${$color}`);
+        className = clsxm(`bg-${$color} text-white border border-${$color}`);
+        break;
       case "secondary":
-        return clsxm(`border border-${$color} text-${$color}`);
+        className = clsxm(`border border-${$color} text-${$color}`);
+        break;
       default:
-        return `bg-palette-1 text-white`;
+        className = `bg-palette-1 text-white`;
     }
+    return className;
   }}
   w-full text-center flex justify-center
   px-4 py-2 rounded-md
