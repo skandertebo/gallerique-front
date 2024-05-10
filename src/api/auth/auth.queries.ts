@@ -56,6 +56,7 @@ const AUTH_QUERIES = {
         address
         credit
         status
+        id
       }
     }
   `,

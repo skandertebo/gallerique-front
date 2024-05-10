@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useNavigate, useOutlet } from "react-router-dom";
 import AuthenticatedNavtop from "../components/AuthenticatedNavtop";
 import AuctionsProvider from "../context/auctions.context";
@@ -18,7 +18,7 @@ export default function AuthenticatedContainer(): JSX.Element | null {
     <AuctionsProvider user={user}>
       <div className="flex flex-col">
         <AuthenticatedNavtop user={user} />
-        {outlet}
+        {React.cloneElement(outlet!, { user })}
       </div>
     </AuctionsProvider>
   );
