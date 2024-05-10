@@ -47,11 +47,12 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
     if (auction) {
       observable
         .pipe(
-          filter(
-            (data) =>
+          filter((data) => {
+            return (
               data.scope === "auction.message.send" &&
-              data.payload?.auctionId === auction.id
-          )
+              data.payload?.conversation?.auction.id === auction.id
+            );
+          })
         )
         .subscribe((data) => {
           if (data.payload) {

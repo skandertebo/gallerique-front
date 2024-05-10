@@ -16,8 +16,8 @@ const ConversationContainer: React.FC<ConversationContainerProps> = ({
     <div>
       <h1>Conversation</h1>
       <div>
-        {conversation.messages.map((message) => (
-          <div key={message.id}>
+        {conversation.messages.map((message, idx) => (
+          <div key={idx}>
             <div>{message.content}</div>
             <div>
               {message.sender.id === user?.id

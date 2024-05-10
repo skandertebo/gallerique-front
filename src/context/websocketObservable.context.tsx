@@ -43,10 +43,13 @@ export const WebsocketObservableProvider: React.FC<React.PropsWithChildren> = ({
     [accessToken]
   );
   const send = (data: WebsocketEmittedMessage) => {
-    socket.emit(data.scope, {
-      ...data.payload,
-      requestId: data.requestId,
-    });
+    socket.emit(
+      data.scope,
+      JSON.stringify({
+        ...data.payload,
+        requestId: data.requestId,
+      })
+    );
   };
 
   useEffect(() => {
