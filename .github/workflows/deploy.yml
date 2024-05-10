@@ -27,6 +27,5 @@ jobs:
             cd gallerique-front
             git pull origin master
             yarn
-            yarn build
-            cp -r dist /var/www/gallerique
+            pm2 restart gallerique-front
             echo "Deployment completed."
