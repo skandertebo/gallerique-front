@@ -21,6 +21,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "no-console": "warn",
     "react-refresh/only-export-components": "off",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {

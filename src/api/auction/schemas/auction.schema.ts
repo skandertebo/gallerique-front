@@ -1,4 +1,5 @@
 import { UserSchema } from "../../auth/schemas/user.schema";
+import { ConversationSchema } from "../../conversation/schemas/conversation.schema";
 import BidSchema from "./bid.schema";
 
 export enum AuctionStatus {
@@ -8,6 +9,7 @@ export enum AuctionStatus {
 }
 
 interface AuctionSchema {
+  id: number;
   title: string;
   picture: string;
   description: string;
@@ -20,7 +22,8 @@ interface AuctionSchema {
   owner: UserSchema;
   winner: UserSchema;
   members: UserSchema[];
-  conversation: unknown;
+  conversation: ConversationSchema;
+  isMember: boolean;
 }
 
 export default AuctionSchema;

@@ -91,12 +91,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
   const logout = () => {
     setUser(null);
     setAccessToken(null);
+    window.location.href = "/";
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: user ? user : whoAmiData?.whoAmI ?? null,
         login,
         register: onRegister,
         accessToken,

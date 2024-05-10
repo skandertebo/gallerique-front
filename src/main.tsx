@@ -7,6 +7,7 @@ import "./App.css";
 import ROUTES from "./ROUTES.ts";
 import { client } from "./api/apiInstance.ts";
 import { AuthProvider } from "./context/auth.context.tsx";
+import { WebsocketObservableProvider } from "./context/websocketObservable.context.tsx";
 import "./index.css";
 
 const router = createBrowserRouter(ROUTES);
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <WebsocketObservableProvider>
+          <RouterProvider router={router} />
+        </WebsocketObservableProvider>
       </AuthProvider>
     </ApolloProvider>
   </React.StrictMode>

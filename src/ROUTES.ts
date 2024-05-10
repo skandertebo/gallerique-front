@@ -1,5 +1,6 @@
 import { RouteObject } from "react-router-dom";
 import AuthenticatedContainer from "./containers/AuthenticatedContainer";
+import AuctionPage from "./pages/auction-page";
 import AuthPage from "./pages/auth-page";
 import LoginForm from "./pages/auth-page/forms/loginForm";
 import RegisterForm from "./pages/auth-page/forms/registerForm";
@@ -28,7 +29,13 @@ const ROUTES: RouteObject[] = [
   {
     path: "/",
     Component: AuthenticatedContainer,
-    children: [{ path: "home", Component: HomePage }],
+    children: [
+      { path: "home", Component: HomePage },
+      {
+        path: "auction/:id",
+        Component: AuctionPage,
+      },
+    ],
   },
 ];
 
