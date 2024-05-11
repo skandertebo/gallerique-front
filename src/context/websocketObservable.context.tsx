@@ -51,12 +51,14 @@ export const WebsocketObservableProvider: React.FC<React.PropsWithChildren> = ({
       })
     );
   };
+  const hasStartedListeningRef = useRef(false);
 
   useEffect(() => {
-    if (socket) {
+    if (socket && !hasStartedListeningRef.current) {
       socket.onAny((_, data) => {
         observable.current.next(data);
       });
+      hasStartedListeningRef.current = true;
     }
   }, [accessToken, socket]);
 

@@ -8,7 +8,7 @@ export enum ConversationType {
 }
 
 export interface ConversationSchema extends GenericSchema {
-  messages: MessageSchema[];
+  messages: Array<MessageSchema & { requestId?: string }>;
   type: ConversationType;
   auction?: Partial<AuctionSchema> & { id: number };
 }
