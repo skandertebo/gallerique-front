@@ -1,10 +1,11 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { filter } from "rxjs";
+import { Subscription, filter } from "rxjs";
 import AUCTION_QUERIES from "../../api/auction/auction.queries";
 import AuctionSchema from "../../api/auction/schemas/auction.schema";
 import { UserSchema } from "../../api/auth/schemas/user.schema";
+import { MessageSchema } from "../../api/conversation/schemas/message.schema";
 import { useAuth } from "../../context/auth.context";
 import { useWebsocketObservable } from "../../context/websocketObservable.context";
 import generateRandomString from "../../utils/generateRandomString";
@@ -30,7 +31,7 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
     variables: {
       id,
       messagesPage: 1,
-      messagesLimit: 1,
+      messagesLimit: 50,
     },
   });
 
@@ -44,8 +45,9 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
   }, [data, loading, auction]);
 
   useEffect(() => {
+    let sub: Subscription | null = null;
     if (auction) {
-      observable
+      sub = observable
         .pipe(
           filter((data) => {
             return (
@@ -59,20 +61,39 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
             setAuction((prev) => {
               if (!prev) return prev;
               if (data.requestId) {
-                // TODO: Replace existing message containing requestId with new created message
+                const messageWithRequestId = prev.conversation?.messages.find(
+                  (msg) => msg.requestId === data.requestId
+                );
+                if (messageWithRequestId) {
+                  return {
+                    ...prev,
+                    conversation: {
+                      ...prev.conversation!,
+                      messages: [
+                        data.payload,
+                        ...prev.conversation!.messages.filter(
+                          (msg) => msg.requestId !== data.requestId
+                        ),
+                      ],
+                    },
+                  };
+                }
               }
               return {
                 ...prev,
                 conversation: {
                   ...prev.conversation!,
-                  messages: [...prev.conversation!.messages, data.payload],
+                  messages: [data.payload, ...prev.conversation!.messages],
                 },
               };
             });
           }
         });
     }
-  }, [auction, observable]);
+    return () => {
+      sub?.unsubscribe();
+    };
+  }, [auction?.id, observable]);
 
   if (loading && !auction) {
     return <div>loading..</div>;
@@ -80,15 +101,35 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
   if (!auction) return null;
 
   const onMessageSend = async (content: string) => {
+    const requestId = generateRandomString(12);
     const message = {
       content,
       auctionId: auction.id,
     };
-    //TODO: make an optimistic update
+    const optimisticMessage: Partial<MessageSchema> & {
+      requestId: string;
+    } = {
+      sender: user,
+      content,
+      requestId,
+    };
+    setAuction((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        conversation: {
+          ...prev.conversation!,
+          messages: [
+            optimisticMessage as MessageSchema,
+            ...prev.conversation!.messages,
+          ],
+        },
+      };
+    });
     send({
       scope: "auction.message.send",
       payload: message,
-      requestId: generateRandomString(12),
+      requestId,
     });
   };
 
