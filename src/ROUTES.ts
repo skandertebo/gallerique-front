@@ -4,6 +4,7 @@ import AuctionPage from "./pages/auction-page";
 import AuthPage from "./pages/auth-page";
 import LoginForm from "./pages/auth-page/forms/loginForm";
 import RegisterForm from "./pages/auth-page/forms/registerForm";
+import CreateAuctionPage from "./pages/create-auction";
 import HomePage from "./pages/home-page";
 import LandingPage from "./pages/landing-page";
 
@@ -34,6 +35,10 @@ const ROUTES: RouteObject[] = [
       {
         path: "auction/:id",
         Component: AuctionPage,
+      },
+      {
+        path: "create-auction",
+        Component: CreateAuctionPage,
       },
     ],
   },

@@ -74,6 +74,28 @@ const AUCTION_QUERIES = {
       }
     }
   `,
+
+  CREATE_AUCTION: gql`
+    mutation createAuction(
+      $title: String!
+      $description: String!
+      $startPrice: Float!
+      $startDate: String!
+      $fileUploadToken: String!
+    ) {
+      createAuction(
+        createAuctionInput: {
+          title: $title
+          description: $description
+          startPrice: $startPrice
+          startDate: $startDate
+          fileUploadToken: $fileUploadToken
+        }
+      ) {
+        id
+      }
+    }
+  `,
 };
 
 export default AUCTION_QUERIES;
