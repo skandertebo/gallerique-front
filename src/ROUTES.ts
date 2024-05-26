@@ -7,6 +7,7 @@ import RegisterForm from "./pages/auth-page/forms/registerForm";
 import CreateAuctionPage from "./pages/create-auction";
 import HomePage from "./pages/home-page";
 import LandingPage from "./pages/landing-page";
+import AddFundPage from "./pages/fund-page";
 
 const ROUTES: RouteObject[] = [
   {
@@ -39,6 +40,10 @@ const ROUTES: RouteObject[] = [
       {
         path: "create-auction",
         Component: CreateAuctionPage,
+      },
+      {
+        path: "add-fund",
+        Component: AddFundPage,
       },
     ],
   },
