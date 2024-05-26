@@ -1,3 +1,4 @@
+import { WithRequestId } from "../../../generic/WithRequestId.type";
 import { UserSchema } from "../../auth/schemas/user.schema";
 import { ConversationSchema } from "../../conversation/schemas/conversation.schema";
 import BidSchema from "./bid.schema";
@@ -18,7 +19,7 @@ interface AuctionSchema {
   startDate: string;
   endTime: string;
   status: AuctionStatus;
-  bids: BidSchema[];
+  bids: WithRequestId<BidSchema>[];
   owner: UserSchema;
   winner: UserSchema;
   members: UserSchema[];

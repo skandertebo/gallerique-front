@@ -55,6 +55,8 @@ const AUCTION_QUERIES = {
         bids {
           owner {
             id
+            firstName
+            lastName
           }
           price
         }

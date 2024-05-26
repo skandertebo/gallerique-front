@@ -6,6 +6,7 @@ import AUCTION_QUERIES from "../../api/auction/auction.queries";
 import AuctionSchema from "../../api/auction/schemas/auction.schema";
 import { UserSchema } from "../../api/auth/schemas/user.schema";
 import { MessageSchema } from "../../api/conversation/schemas/message.schema";
+import BidContainer from "../../components/BidContainer";
 import { useAuth } from "../../context/auth.context";
 import { useWebsocketObservable } from "../../context/websocketObservable.context";
 import generateRandomString from "../../utils/generateRandomString";
@@ -37,7 +38,6 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
 
   const [auction, setAuction] = useState<AuctionSchema | null>(null);
   const { observable, send } = useWebsocketObservable();
-
   useEffect(() => {
     if (data && !loading && !auction) {
       setAuction(data.auction);
@@ -51,8 +51,10 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
         .pipe(
           filter((data) => {
             return (
-              data.scope === "auction.message.send" &&
-              data.payload?.conversation?.auction.id === auction.id
+              (data.scope === "auction.message.send" &&
+                data.payload?.conversation?.auction.id === auction.id) ||
+              (data.scope === "auction.bid.send" &&
+                data.payload?.auction?.id === auction.id)
             );
           })
         )
@@ -60,32 +62,57 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
           if (data.payload) {
             setAuction((prev) => {
               if (!prev) return prev;
-              if (data.requestId) {
-                const messageWithRequestId = prev.conversation?.messages.find(
-                  (msg) => msg.requestId === data.requestId
-                );
-                if (messageWithRequestId) {
-                  return {
-                    ...prev,
-                    conversation: {
-                      ...prev.conversation!,
-                      messages: [
-                        data.payload,
-                        ...prev.conversation!.messages.filter(
-                          (msg) => msg.requestId !== data.requestId
-                        ),
-                      ],
-                    },
-                  };
+              if (data.scope === "auction.message.send") {
+                if (data.requestId) {
+                  const messageWithRequestId = prev.conversation?.messages.find(
+                    (msg) => msg.requestId === data.requestId
+                  );
+                  if (messageWithRequestId) {
+                    return {
+                      ...prev,
+                      conversation: {
+                        ...prev.conversation!,
+                        messages: [
+                          data.payload,
+                          ...prev.conversation!.messages.filter(
+                            (msg) => msg.requestId !== data.requestId
+                          ),
+                        ],
+                      },
+                    };
+                  }
                 }
+                return {
+                  ...prev,
+                  conversation: {
+                    ...prev.conversation!,
+                    messages: [data.payload, ...prev.conversation!.messages],
+                  },
+                };
+              } else if (data.scope === "auction.bid.send") {
+                // Handle bid update
+                if (data.requestId) {
+                  const bidWithRequestId = prev.bids.find(
+                    (bid) => bid.requestId === data.requestId
+                  );
+                  if (bidWithRequestId) {
+                    return {
+                      ...prev,
+                      bids: [
+                        data.payload,
+                        ...prev.bids.filter(
+                          (bid) => bid.requestId !== data.requestId
+                        ),
+                      ].sort((a, b) => a.price - b.price),
+                    };
+                  }
+                }
+                return {
+                  ...prev,
+                  bids: [data.payload, ...prev.bids],
+                };
               }
-              return {
-                ...prev,
-                conversation: {
-                  ...prev.conversation!,
-                  messages: [data.payload, ...prev.conversation!.messages],
-                },
-              };
+              return prev;
             });
           }
         });
@@ -133,12 +160,49 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
     });
   };
 
+  const onBid = async (price: number) => {
+    const requestId = generateRandomString(12);
+    const bid = {
+      price,
+      auctionId: auction.id,
+    };
+    const optimisticBid = {
+      owner: user,
+      price,
+      requestId,
+      createdAt: "",
+      auction,
+      updatedAt: "",
+      deletedAt: "",
+      id: -1,
+    };
+    setAuction((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        bids: [optimisticBid, ...prev.bids].sort((a, b) => a.price - b.price),
+      };
+    });
+    send({
+      scope: "auction.bid.send",
+      payload: bid,
+      requestId,
+    });
+  };
+
   return (
     <div className="flex">
       <ConversationContainer
         conversation={auction?.conversation!}
         user={user}
         onMessageSend={onMessageSend}
+      />
+
+      <BidContainer
+        bids={auction?.bids}
+        me={user}
+        onBid={onBid}
+        auction={auction}
       />
     </div>
   );
