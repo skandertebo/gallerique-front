@@ -23,10 +23,17 @@ const AuctionCard: React.FC<AuctionCardProps> = ({
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
-    if (new Date(auction.startDate).getTime() < new Date().getTime()) {
+    if (
+      new Date(auction.startDate).getTime() > new Date().getTime() ||
+      new Date(auction.endTime).getTime() > new Date().getTime()
+    ) {
       interval = setInterval(() => {
         if (new Date(auction.endTime).getTime() < new Date().getTime()) {
           if (interval) clearInterval(interval);
+        } else if (
+          new Date(auction.startDate).getTime() > new Date().getTime()
+        ) {
+          setRemainingTime(formatRemainingTime(auction.startDate));
         } else {
           setRemainingTime(formatRemainingTime(auction.endTime));
         }

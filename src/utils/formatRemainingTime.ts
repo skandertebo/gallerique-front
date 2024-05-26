@@ -3,6 +3,10 @@ export default function formatRemainingTime(endTime: string): string {
   if (remainingTime < 0) {
     return "00:00:00";
   }
+  const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+  if (days >= 1) {
+    return `${days} Days`;
+  }
   const hours = Math.floor(
     (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
   );
