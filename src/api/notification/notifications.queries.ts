@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 const NOTIFICATION_QUERIES = {
   GET_NOTIFICATIONS: gql`
     query GetNotifications {
-      getNotifications(limit: 5, page: 1) {
+      notificationsOfUser(limit: 5, page: 1) {
         title
         content
         createdAt
