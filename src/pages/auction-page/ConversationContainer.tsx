@@ -66,8 +66,8 @@ const ConversationContainer: React.FC<ConversationContainerProps> = ({
     setInputVal("");
   };
   return (
-    <div className="flex flex-col gap-6 px-4 py-2 bg-palette-6 bg-opacity-85 rounded-xl max-w-[400px] md:w-[400px] max-h-[60vh]">
-      <div className="flex flex-col-reverse gap-4 overflow-y-auto">
+    <div className="flex flex-col gap-6 p-4 bg-palette-6 bg-opacity-85 rounded-xl max-w-[500px] md:w-[500px] h-[80vh]">
+      <div className="flex flex-col-reverse gap-4 overflow-y-auto flex-grow">
         {conversation.messages.map((message, idx) => (
           <MessageItem
             key={idx}
@@ -76,7 +76,7 @@ const ConversationContainer: React.FC<ConversationContainerProps> = ({
           />
         ))}
       </div>
-      <div className="flex w-full relative">
+      <div className="flex w-full relative mt-4">
         <input
           onChange={handleChange}
           className="rounded-xl w-full text-palette-6 bg-white px-6 py-2 placeholder:text-palette-3 focus:ring-none focus:outline-none"

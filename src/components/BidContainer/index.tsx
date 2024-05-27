@@ -29,21 +29,21 @@ const BidContainer: React.FC<BidContainerProps> = ({
         ? "Starts at"
         : "Ends at";
   return (
-    <div className="flex gap-1 items-center h-[200px]">
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-4 items-center">
+    <div className="flex gap-1 items-center h-[200px] m-4">
+      <div className="flex flex-col gap-2 ">
+        <div className="flex gap-4 text-lg items-center">
           <GiSandsOfTime className="h-7 w-7 text-palette-2" />
-          <p className="text-black text-md font-semibold">
+          <p className="text-black text-lg font-semibold">
             {remainingTimeText}: {remainingTime}
           </p>
         </div>
         <div className="flex gap-4 items-center">
           <LuCircleDollarSign className="h-7 w-7 text-palette-2" />
-          <p className="text-black text-md font-semibold">
+          <p className="text-black text-lg font-semibold">
             Current Price: {auction.currentPrice}
           </p>
         </div>
-        <div className="flex gap-1 items-center">
+        <div className="flex gap-1 items-center ml-6 mt-4">
           <input
             type="number"
             value={bidValue}
@@ -55,7 +55,7 @@ const BidContainer: React.FC<BidContainerProps> = ({
           </button>
         </div>
       </div>
-      <div className="flex flex-col p-4 bg-palette-2 h-full overflow-y-auto rounded-xl min-w-[200px]">
+      <div className="flex flex-col p-4 bg-palette-2 h-full overflow-y-auto rounded-xl min-w-[200px]  text-center">
         {bids.map((bid) => (
           <div
             key={bid.id}
@@ -65,9 +65,9 @@ const BidContainer: React.FC<BidContainerProps> = ({
             )}
           >
             <p className="text-lg ">
-              {bid.owner.id === me.id ? "You" : bid.owner.firstName} Raised
+              {bid.owner.id === me.id ? "You" : bid.owner.firstName} Raised{" "}
+              {bid.price}
             </p>
-            <p className="text-lg ">{bid.price}</p>
           </div>
         ))}
       </div>

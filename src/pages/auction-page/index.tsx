@@ -191,19 +191,33 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
   };
 
   return (
-    <div className="flex">
-      <ConversationContainer
-        conversation={auction?.conversation!}
-        user={user}
-        onMessageSend={onMessageSend}
-      />
-
-      <BidContainer
-        bids={auction?.bids}
-        me={user}
-        onBid={onBid}
-        auction={auction}
-      />
+    <div className="md:flex justify-between h-fit">
+      <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center p-4 md:w-1/2  mb-6 mt-12">
+          <h1 className="text-4xl font-bold text-palette-5 mb-4">
+            {auction.title}
+          </h1>
+          <img
+            src={"/cam.jpg"}
+            alt="Auction Image"
+            className="rounded-lg mb-4 w-3/4"
+          />
+          <p className="text-palette-0 font-bold">{auction.description}</p>
+        </div>
+        <BidContainer
+          bids={auction?.bids}
+          me={user}
+          onBid={onBid}
+          auction={auction}
+        />
+      </div>
+      <div className="ml-auto h-full p-16">
+        <ConversationContainer
+          conversation={auction?.conversation!}
+          user={user}
+          onMessageSend={onMessageSend}
+        />
+      </div>
     </div>
   );
 };
