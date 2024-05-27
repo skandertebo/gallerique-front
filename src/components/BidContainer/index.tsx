@@ -55,21 +55,23 @@ const BidContainer: React.FC<BidContainerProps> = ({
           </button>
         </div>
       </div>
-      <div className="flex flex-col p-4 bg-palette-2 h-full overflow-y-auto rounded-xl min-w-[200px]  text-center">
-        {bids.map((bid) => (
-          <div
-            key={bid.id}
-            className={clsxm(
-              "flex flex-row justify-between text-white",
-              bid.id === -1 && "opacity-55"
-            )}
-          >
-            <p className="text-lg ">
-              {bid.owner.id === me.id ? "You" : bid.owner.firstName} Raised{" "}
-              {bid.price}
-            </p>
-          </div>
-        ))}
+      <div className="flex flex-col-reverse p-4 bg-palette-2 h-full overflow-y-auto rounded-xl min-w-[200px]  text-center">
+        {bids
+          .map((bid) => (
+            <div
+              key={bid.id}
+              className={clsxm(
+                "flex flex-row justify-between text-white",
+                bid.id === -1 && "opacity-55"
+              )}
+            >
+              <p className="text-lg ">
+                {bid.owner.id === me.id ? "You" : bid.owner.firstName} Raised{" "}
+                {bid.price}
+              </p>
+            </div>
+          ))
+          .reverse()}
       </div>
     </div>
   );

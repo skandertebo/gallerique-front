@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
+import { AiOutlineLoading } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { Subscription, filter } from "rxjs";
 import AUCTION_QUERIES from "../../api/auction/auction.queries";
@@ -123,7 +124,11 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
   }, [auction?.id, observable]);
 
   if (loading && !auction) {
-    return <div>loading..</div>;
+    return (
+      <div className="h-[95vh] w-screen flex justify-center items-center">
+        <AiOutlineLoading className="h-12 w-12 animate-spin text-palette-5" />
+      </div>
+    );
   }
   if (!auction) return null;
 

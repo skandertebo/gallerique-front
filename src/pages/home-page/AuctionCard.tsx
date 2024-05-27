@@ -47,7 +47,7 @@ const AuctionCard: React.FC<AuctionCardProps> = ({
   return (
     <div className="flex flex-col p-4 rounded-xl border-4 border-palette-3">
       <img
-        src={auction.picture || auctionImg}
+        src={auction.image || auctionImg}
         alt="auction"
         className="w-full h-48 object-cover rounded-lg"
       />
