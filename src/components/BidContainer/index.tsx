@@ -44,38 +44,40 @@ const BidContainer: React.FC<BidContainerProps> = ({
             Current Price: {auction.currentPrice}
           </p>
         </div>
-        <div className="flex gap-1 items-center ml-6 mt-4">
-          <input
-            type="number"
-            value={bidValue}
-            onChange={(e) => setBidValue(parseInt(e.target.value))}
-            className="w-1/2 px-2 py-1.5 rounded-lg border-2 border-palette-5"
-            min={auction.currentPrice + 1}
-          />
-          <button
-            onClick={() => {
-              onBid(bidValue);
-              setBidValue(0);
-            }}
-            disabled={
-              bidValue < auction.currentPrice + 1 ||
-              auction.owner.id === me.id ||
-              new Date(auction.endTime) < new Date() ||
-              me.credit < auction.currentPrice
-            }
-            className="disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <CiCirclePlus className="h-10 w-10 text-palette-5" />
-          </button>
-          {me.credit < auction.currentPrice && (
-            <>
-              <p className="text-red-500">Not enough credit to bid</p>
-              <Link to="/add-fund" className="text-red-500">
-                Add Funds
-              </Link>
-            </>
-          )}
-        </div>
+        {me.id !== auction.owner.id && (
+          <div className="flex gap-1 items-center ml-6 mt-4">
+            <input
+              type="number"
+              value={bidValue}
+              onChange={(e) => setBidValue(parseInt(e.target.value))}
+              className="w-1/2 px-2 py-1.5 rounded-lg border-2 border-palette-5"
+              min={auction.currentPrice + 1}
+            />
+            <button
+              onClick={() => {
+                onBid(bidValue);
+                setBidValue(0);
+              }}
+              disabled={
+                bidValue < auction.currentPrice + 1 ||
+                auction.owner.id === me.id ||
+                new Date(auction.endTime) < new Date() ||
+                me.credit < auction.currentPrice
+              }
+              className="disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <CiCirclePlus className="h-10 w-10 text-palette-5" />
+            </button>
+            {me.credit < auction.currentPrice && (
+              <>
+                <p className="text-red-500">Not enough credit to bid</p>
+                <Link to="/add-fund" className="text-red-500">
+                  Add Funds
+                </Link>
+              </>
+            )}
+          </div>
+        )}
       </div>
       <div className="flex flex-col-reverse p-4 bg-palette-2 h-full overflow-y-auto rounded-xl min-w-[200px]  text-center">
         {bids.map((bid) => (
