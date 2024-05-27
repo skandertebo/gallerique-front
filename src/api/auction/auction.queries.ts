@@ -40,6 +40,7 @@ const AUCTION_QUERIES = {
         endTime
         startPrice
         currentPrice
+        image
         owner {
           id
           firstName
@@ -55,6 +56,8 @@ const AUCTION_QUERIES = {
         bids {
           owner {
             id
+            firstName
+            lastName
           }
           price
         }
