@@ -12,7 +12,7 @@ export enum AuctionStatus {
 interface AuctionSchema {
   id: number;
   title: string;
-  picture: string;
+  image: string;
   description: string;
   startPrice: number;
   currentPrice: number;

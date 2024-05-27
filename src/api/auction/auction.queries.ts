@@ -40,6 +40,7 @@ const AUCTION_QUERIES = {
         endTime
         startPrice
         currentPrice
+        image
         owner {
           id
           firstName

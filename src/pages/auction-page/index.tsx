@@ -198,7 +198,7 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
             {auction.title}
           </h1>
           <img
-            src={"/cam.jpg"}
+            src={auction.image ?? "/cam.jpg"}
             alt="Auction Image"
             className="rounded-lg mb-4 w-3/4"
           />
