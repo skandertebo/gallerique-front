@@ -7,6 +7,7 @@ import AUCTION_QUERIES from "../../api/auction/auction.queries";
 import AuctionSchema from "../../api/auction/schemas/auction.schema";
 import { UserSchema } from "../../api/auth/schemas/user.schema";
 import { MessageSchema } from "../../api/conversation/schemas/message.schema";
+import AuctionEndModal from "../../components/AuctionEndModal";
 import BidContainer from "../../components/BidContainer";
 import { useAuth } from "../../context/auth.context";
 import { useWebsocketObservable } from "../../context/websocketObservable.context";
@@ -36,7 +37,7 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
       messagesLimit: 50,
     },
   });
-
+  const [displayEndModal, setDisplayEndModal] = useState(false);
   const [auction, setAuction] = useState<AuctionSchema | null>(null);
   const { observable, send } = useWebsocketObservable();
   useEffect(() => {
@@ -55,12 +56,27 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
               (data.scope === "auction.message.send" &&
                 data.payload?.conversation?.auction.id === auction.id) ||
               (data.scope === "auction.bid.send" &&
-                data.payload?.auction?.id === auction.id)
+                data.payload?.auction?.id === auction.id) ||
+              (data.scope === "auction.end" && data.payload?.id === auction.id)
             );
           })
         )
         .subscribe((data) => {
           if (data.payload) {
+            if (data.scope === "auction.end") {
+              console.log(data.payload);
+              setAuction((prev) => {
+                if (!prev) return prev;
+                return {
+                  ...prev,
+                  winner: data.payload.winner,
+                  endTime: data.payload.endTime,
+                  currentPrice: data.payload.currentPrice,
+                };
+              });
+              setDisplayEndModal(true);
+              return;
+            }
             setAuction((prev) => {
               if (!prev) return prev;
               if (data.scope === "auction.message.send") {
@@ -202,34 +218,44 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
   };
 
   return (
-    <div className="md:flex justify-between h-fit">
-      <div className="flex flex-col items-center">
-        <div className="flex flex-col items-center p-4 md:w-1/2  mb-6 mt-12">
-          <h1 className="text-4xl font-bold text-palette-5 mb-4">
-            {auction.title}
-          </h1>
-          <img
-            src={auction.image ?? "/cam.jpg"}
-            alt="Auction Image"
-            className="rounded-lg mb-4 w-3/4"
-          />
-          <p className="text-palette-0 font-bold">{auction.description}</p>
-        </div>
-        <BidContainer
-          bids={auction?.bids}
-          me={user}
-          onBid={onBid}
+    <>
+      {1 && (
+        <AuctionEndModal
           auction={auction}
+          open={displayEndModal}
+          onClose={() => setDisplayEndModal(false)}
+          me={user}
         />
+      )}
+      <div className="md:flex justify-between h-fit">
+        <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center p-4 md:w-1/2  mb-6 mt-12">
+            <h1 className="text-4xl font-bold text-palette-5 mb-4">
+              {auction.title}
+            </h1>
+            <img
+              src={auction.image ?? "/cam.jpg"}
+              alt="Auction Image"
+              className="rounded-lg mb-4 w-3/4"
+            />
+            <p className="text-palette-0 font-bold">{auction.description}</p>
+          </div>
+          <BidContainer
+            bids={auction?.bids}
+            me={user}
+            onBid={onBid}
+            auction={auction}
+          />
+        </div>
+        <div className="ml-auto h-full p-16">
+          <ConversationContainer
+            conversation={auction?.conversation!}
+            user={user}
+            onMessageSend={onMessageSend}
+          />
+        </div>
       </div>
-      <div className="ml-auto h-full p-16">
-        <ConversationContainer
-          conversation={auction?.conversation!}
-          user={user}
-          onMessageSend={onMessageSend}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

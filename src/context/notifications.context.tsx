@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { NotificationSchema } from "../api/notification/schemas/notification.schema";
 import { useQuery } from "@apollo/client";
-import NOTIFICATION_QUERIES from "../api/notification/notifications.queries";
-import { useAuth } from "./auth.context";
-import { apiDomain, apiProtocol } from "../constants";
 import { EventSourcePolyfill } from "event-source-polyfill";
+import { createContext, useContext, useEffect, useState } from "react";
+import NOTIFICATION_QUERIES from "../api/notification/notifications.queries";
+import { NotificationSchema } from "../api/notification/schemas/notification.schema";
+import { apiDomain, apiProtocol } from "../constants";
+import { useAuth } from "./auth.context";
 
 export type NotificationsContextProps = {
   notificationsLoading: boolean;
@@ -46,7 +46,7 @@ export const NotificationProvider = ({ children }) => {
       setNotifications(notificationsData.notificationsOfUser);
     }
     if (notificationsError) {
-      throw new Error("Failed to fetch notifications");
+      //throw new Error("Failed to fetch notifications");
     }
   }, [notificationsData, notificationsError, notificationsLoading]);
 

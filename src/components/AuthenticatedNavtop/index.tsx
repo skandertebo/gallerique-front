@@ -21,7 +21,9 @@ const AuthenticatedNavtop: React.FC<AuthenticatedNavtopProps> = ({ user }) => {
   return (
     <nav className="bg-palette-2 flex w-screen py-1 justify-between">
       <div className="flex items-center gap-2">
-        <img src={logo} className="h-20" />
+        <Link to={"/home"}>
+          <img src={logo} className="h-20" />
+        </Link>
         <span className="text-xl font-medium hidden md:flex tracking-wider">
           GALLERIQUE
         </span>

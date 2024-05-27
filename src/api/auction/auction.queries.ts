@@ -8,6 +8,7 @@ const AUCTION_QUERIES = {
         title
         description
         startDate
+        image
         endTime
         startPrice
         currentPrice
