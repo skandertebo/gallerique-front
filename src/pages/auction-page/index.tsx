@@ -99,18 +99,24 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
                   if (bidWithRequestId) {
                     return {
                       ...prev,
+                      currentPrice:
+                        data.payload.auction?.price ?? data.payload.price,
                       bids: [
                         data.payload,
                         ...prev.bids.filter(
                           (bid) => bid.requestId !== data.requestId
                         ),
-                      ].sort((a, b) => a.price - b.price),
+                      ].sort((a, b) => b.price - a.price),
                     };
                   }
                 }
                 return {
                   ...prev,
-                  bids: [data.payload, ...prev.bids],
+                  currentPrice:
+                    data.payload.auction?.price ?? data.payload.price,
+                  bids: [...prev.bids, data.payload].sort(
+                    (a, b) => b.price - a.price
+                  ),
                 };
               }
               return prev;
@@ -185,7 +191,7 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
       if (!prev) return prev;
       return {
         ...prev,
-        bids: [optimisticBid, ...prev.bids].sort((a, b) => a.price - b.price),
+        bids: [optimisticBid, ...prev.bids].sort((a, b) => b.price - a.price),
       };
     });
     send({

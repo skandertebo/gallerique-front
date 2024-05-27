@@ -3,6 +3,7 @@ import { FaUserAlt } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
 import NotificationList from "./notificationList";
 
+import { Link } from "react-router-dom";
 import { UserSchema } from "../../api/auth/schemas/user.schema";
 import logo from "../../assets/images/logo.png";
 import { useAuth } from "../../context/auth.context";
@@ -32,6 +33,9 @@ const AuthenticatedNavtop: React.FC<AuthenticatedNavtopProps> = ({ user }) => {
             {user.firstName}&nbsp;{user.lastName}
           </span>
           <span className="text-sm">Credit: {user.credit}</span>
+          <Link to="/add-fund" className="text-sm underline text-palette-5">
+            Add Fund
+          </Link>
         </div>
         <div className="relative inline-block text-left cursor-pointer">
           <IoNotifications
