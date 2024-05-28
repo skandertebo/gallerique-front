@@ -64,7 +64,6 @@ const AuctionPageInner: React.FC<AuctionPageProps> = ({ id, user }) => {
         .subscribe((data) => {
           if (data.payload) {
             if (data.scope === "auction.end") {
-              console.log(data.payload);
               setAuction((prev) => {
                 if (!prev) return prev;
                 return {

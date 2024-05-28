@@ -79,9 +79,6 @@ const AuctionCard: React.FC<AuctionCardProps> = ({
           )}
           <FaArrowRight className="h-4 w-4 text-white" />
         </button>
-        {auction.winner && (
-          <p className="text-md font-medium text-palette-5">FINISHED</p>
-        )}
         {new Date(auction.startDate).getTime() > new Date().getTime() ? (
           <p className="text-md font-medium text-palette-5">
             Starts at at: &nbsp;{" "}
@@ -93,7 +90,16 @@ const AuctionCard: React.FC<AuctionCardProps> = ({
             <span className="font-semibold">{remainingTime}</span>
           </p>
         ) : (
-          <p className="text-md font-medium text-palette-5">Ended</p>
+          <div className="flex flex-col">
+            <p className="text-md font-medium text-palette-5">Ended</p>
+            {auction.winner && (
+              <>
+                <p className="text-md font-medium text-palette-5">
+                  Winner: {auction.winner.firstName} {auction.winner.lastName}
+                </p>
+              </>
+            )}
+          </div>
         )}
       </div>
     </div>

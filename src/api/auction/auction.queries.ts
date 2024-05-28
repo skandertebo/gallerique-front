@@ -19,6 +19,12 @@ const AUCTION_QUERIES = {
           email
         }
         isMember
+        winner {
+          id
+          firstName
+          lastName
+          email
+        }
       }
     }
   `,
